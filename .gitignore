@@ -1,2 +1,3 @@
 *.pyc
 *.json
+mi_salud_api/db.sqlite3

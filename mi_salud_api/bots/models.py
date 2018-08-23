@@ -10,3 +10,17 @@ class Bot(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class HistoricalMessage(models.Model):
+    message = models.CharField(max_length=500)
+    message_date = models.CharField(max_length=150)
+    flow = models.CharField(max_length=150)
+    model_tag = models.CharField(max_length=150, null=True)
+    user_tag = models.CharField(max_length=150, null=True)
+    id_message = models.IntegerField()
+    id_rp_user = models.IntegerField()
+    id_bot = models.IntegerField()
+
+    def __str__(self):
+        return "{} {}".format(self.id_message, self.flow, self.message_date)
