@@ -6,7 +6,16 @@ class Bot(models.Model):
     token = models.CharField(max_length=150)
     name = models.CharField(max_length=150)
     creation_date = models.DateField(auto_now_add=True)
+    categories = models.ManyToManyField('Category', related_name='bots')
     enable = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=150)
+    description = models.CharField(max_length=400)
 
     def __str__(self):
         return self.name
@@ -19,6 +28,7 @@ class HistoricalMessage(models.Model):
     model_tag = models.CharField(max_length=150, null=True)
     user_tag = models.CharField(max_length=150, null=True)
     id_message = models.IntegerField()
+    id_message_response = models.IntegerField()
     id_rp_user = models.IntegerField()
     id_bot = models.IntegerField()
 
