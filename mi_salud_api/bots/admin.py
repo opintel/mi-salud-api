@@ -31,4 +31,4 @@ class HistoricalMessageAdmin(admin.ModelAdmin):
     model = HistoricalMessage
     search_fields = ('id_message', 'id_rp_user', 'id_bot',)
     list_filter = ('id_bot',)
-    list_display = ('id_message', 'id_rp_user', 'id_bot', 'message_date')
+    list_display = ('id_message', 'id_rp_user', 'id_bot', 'message_date', 'model_tag', 'user_tag', 'message')

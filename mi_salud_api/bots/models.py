@@ -28,7 +28,7 @@ class HistoricalMessage(models.Model):
     model_tag = models.CharField(max_length=150, null=True)
     user_tag = models.CharField(max_length=150, null=True)
     id_message = models.IntegerField()
-    id_message_response = models.IntegerField()
+    id_message_response = models.IntegerField(null=True)
     id_rp_user = models.IntegerField()
     id_bot = models.IntegerField()
 
