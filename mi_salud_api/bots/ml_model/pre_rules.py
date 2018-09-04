@@ -1,7 +1,8 @@
 # coding: utf-8
+import re
 from emoji import UNICODE_EMOJI
 from unicodedata import normalize
-import re
+
 
 texto='aborto'
 
@@ -46,42 +47,41 @@ def procesa_reglas(texto):
         out='twitter-image'
     #print('nchar:'+ str(cc))
     #print('wc:'+ str(wc))
-    
+
     if (len(re.findall("\?", texto))==cc)  & (len(out)==0):
        # print('puros ?')
         out='pregunta'
-    
+
     texto=re.sub('[^\w\s]','', texto) #Quitar puntuacion
     #print('quitar punct '+texto)
 
     texto=re.sub('^[ \t]+|[ \t]+$', '', texto) #Otra vez quitar leading y trailing
     #print('quitar leading y trailing '+texto)
-    
+
     #Contar palabras y caracteres otra vez
     wc=len(str(texto).split(" "))
     cc=len(str(texto))
-    
+
     #print('nchar: '+ str(cc))
     #print('wc: '+ str(wc))
-    
+
     emojis=is_emoji(texto) #Conteo de emojis
     #print('conteo de emojis: '+ str(emojis))
-    
+
     if (emojis==cc) & (cc_1>0)  & (len(out)==0):
         #print('puros emojis')
         out='emoji'
-    
+
     texto=give_emoji_free_text(texto)#Elimina emojis
     #print('quitar emojis:'+ texto)
     
     if (wc==1) & (bool(re.search('https|http', texto)))  & (len(out)==0):
         #print('es spam')
         out='spam'
-    
+
     texto=normalize('NFD', texto).encode('ascii', 'ignore').decode('utf-8') # quitar acentos
     #print('quitar acentos '+texto)
-    
-    
+
     if (cc==2) & (bool(re.search('si|sii|ssi', texto))) & (len(out)==0):
         #print('es: sí')
         out='si'
@@ -116,12 +116,7 @@ def procesa_reglas(texto):
         out='modelo'
     else:
         out=out
-        #print('ninguna 4')
-    
+
     out={'result':out, 'texto':texto_orig,'texto_proc':texto, 'wc':wc, 'cc':cc}
-    
+
     return(out)
-
-# procesa_reglas(texto)
-
-# get_ipython().system('jupyter nbconvert --to script script_reglas.ipynb')
