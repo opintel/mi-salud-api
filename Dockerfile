@@ -8,7 +8,7 @@ RUN apt-get update && \
 COPY . /mi-salud
 WORKDIR /mi-salud
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt && chmod 777 init-misalud.sh
 EXPOSE 8000
 
-ENTRYPOINT [ "init-misalud.sh" ]
+ENTRYPOINT [ "./init-misalud.sh" ]

@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ixwf&^^(i-pq11e($@1sds1tg^x@sh&xpg0#^wn93)4tkwkvp('
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLALLOWED_HOSTS', '*,0.0.0.0').split(',')
 
 
 # Application definition
@@ -82,15 +82,11 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('GENERATOR_DB_NAME', 'generador_vl'),
-        'USER': os.environ.get('GENERATOR_DB_USER', 'totoro'),
-        'PASSWORD': os.environ.get('GENERATOR_DB_PASSWORD', 'totoro'),
-        'HOST': os.environ.get('GENERATOR_DB_HOST', '0.0.0.0'),
-        'PORT': os.environ.get('GENERATOR_DB_PORT', '5439'),
-        'TEST': {
-            'NAME': 'test_totoro',
-            'PASSWORD': os.environ.get('GENERATOR_DB_PASSWORD', 'totoro'),
-        },
+        'NAME': os.environ.get('POSTGRES_DB', 'generador_vl'),
+        'USER': os.environ.get('POSTGRES_USER', 'totoro'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'totoro'),
+        'HOST': os.environ.get('POSTGRES_HOST', '0.0.0.0'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5439')
     }
 }
 
