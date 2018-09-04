@@ -76,9 +76,21 @@ WSGI_APPLICATION = 'mi_salud_api.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('GENERATOR_DB_NAME', 'generador_vl'),
+        'USER': os.environ.get('GENERATOR_DB_USER', 'totoro'),
+        'PASSWORD': os.environ.get('GENERATOR_DB_PASSWORD', 'totoro'),
+        'HOST': os.environ.get('GENERATOR_DB_HOST', '0.0.0.0'),
+        'PORT': os.environ.get('GENERATOR_DB_PORT', '5439'),
+        'TEST': {
+            'NAME': 'test_totoro',
+            'PASSWORD': os.environ.get('GENERATOR_DB_PASSWORD', 'totoro'),
+        },
     }
 }
 
