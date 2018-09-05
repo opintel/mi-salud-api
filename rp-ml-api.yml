@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: rp-ml-api
+  name: rp-ml-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rp-ml-api
+  template:
+    spec:
+      containers:
+      - env:
+        - name: DEBUG
+          value: "True"
+        - name: SECRET_KEY
+          value: ""
+        - name: ALLALLOWED_HOSTS
+          value: # Lista IP y/o DNS separados por coma
+        - name: POSTGRES_DB
+          value: misalud
+        - name: POSTGRES_USER
+          value: mlmisalud
+        - name: POSTGRES_PASSWORD
+          value: # Ingresar password de la base de datos
+        - name: POSTGRES_HOST
+          value: # Ingresar IP del servicio k8 asociado a la BD
+        - name: POSTGRES_PORT
+          value: "5432"
+      image: mxabierto/rp-ml-api:v01
+      name: rp-ml-api
+      ports:
+      - containerPort: 8000
+        protocol: TCP

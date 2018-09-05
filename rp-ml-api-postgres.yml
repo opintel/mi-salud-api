@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: rp-ml-api-postgres
+  name: rp-ml-api-postgres
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rp-ml-api-postgres
+  template:
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: misalud
+        - name: POSTGRES_USER
+          value: mlmisalud
+        - name: POSTGRES_PASSWORD
+          value: # Ingresar password de la base de datos
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        image: postgres
+        name: rp-ml-api-postgres
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/lib/postresql/data
+          name: rp-ml-storage
+      volumes:
+      - hostPath:
+          path: # Ingresar path del filesystem del host
+          name: /var/lib/postresql/data
