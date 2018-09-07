@@ -82,9 +82,9 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTGRES_DB', 'generador_vl'),
-        'USER': os.environ.get('POSTGRES_USER', 'totoro'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'totoro'),
+        'NAME': os.environ.get('POSTGRES_DB', 'misalud'),
+        'USER': os.environ.get('POSTGRES_USER', 'mlmisalud'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),
         'HOST': os.environ.get('POSTGRES_HOST', '0.0.0.0'),
         'PORT': os.environ.get('POSTGRES_PORT', '5439')
     }
@@ -127,4 +127,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = os.environ.get('STATIC_URL', '/static/')

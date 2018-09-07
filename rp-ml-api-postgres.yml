@@ -11,6 +11,9 @@ spec:
     matchLabels:
       app: rp-ml-api-postgres
   template:
+    metadata:
+      labels:
+        app: rp-ml-api-postgres
     spec:
       containers:
       - env:
@@ -31,6 +34,6 @@ spec:
         - mountPath: /var/lib/postresql/data
           name: rp-ml-storage
       volumes:
-      - hostPath:
+      - name: rp-ml-storage
+        hostPath:
           path: # Ingresar path del filesystem del host
-          name: /var/lib/postresql/data

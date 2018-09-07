@@ -11,6 +11,9 @@ spec:
     matchLabels:
       app: rp-ml-api
   template:
+    metadata:
+      labels:
+        app: rp-ml-api
     spec:
       containers:
       - env:
@@ -30,8 +33,8 @@ spec:
           value: # Ingresar IP del servicio k8 asociado a la BD
         - name: POSTGRES_PORT
           value: "5432"
-      image: mxabierto/rp-ml-api:v01
-      name: rp-ml-api
-      ports:
-      - containerPort: 8000
-        protocol: TCP
+        image: mxabierto/rp-ml-api:v01
+        name: rp-ml-api
+        ports:
+        - containerPort: 8000
+          protocol: TCP
