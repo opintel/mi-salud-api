@@ -33,6 +33,8 @@ spec:
           value: # Ingresar IP del servicio k8 asociado a la BD
         - name: POSTGRES_PORT
           value: "5432"
+        - name: STATIC_URL
+          value: "/static/"
         image: mxabierto/rp-ml-api:v01
         name: rp-ml-api
         ports:
