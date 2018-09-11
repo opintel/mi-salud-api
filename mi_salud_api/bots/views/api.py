@@ -17,20 +17,23 @@ def tag_message(request, id_model):
     """
 
     bot = get_object_or_404(Bot, id=int(id_model))
-    flow = request.GET.get('flow_id')
+
     id_rp_user = request.GET.get('id_rp_user')
+    user_tag = request.GET.get('user_tag')
+    message = request.GET.get('message')
 
     messages = query_rp_api(id_rp_user)
     # category = procesa_reglas(message)
 
     message_record = HistoricalMessage(
-        message=messages[1].get('text'),
+        message=message,
         message_date=datetime.now(),
         flow=messages[1].get('channel', {'name'}).get('name'),
-        model_tag=messages[0].get('text'),
+        model_tag='',
         id_message=messages[1].get('id'),
         id_rp_user=id_rp_user,
-        id_bot=bot.id
+        id_bot=bot.id,
+        user_tag=user_tag
     )
 
     message_record.save()
@@ -56,7 +59,7 @@ def record_response_tag(request, id_model, id_message):
 def query_rp_api(id_user):
     import requests
 
-    endpoint_url = 'http://'+settings.RP_API_URL+'/api/v2/messages.json?contact=%s&top=True'%(id_user)
+    endpoint_url = settings.RP_API_URL+'/api/v2/messages.json?contact=%s&top=True'%(id_user)
     token = 'token %s' % settings.RP_TOKEN
 
     headers = {'content-type': 'application/json', 'Authorization': token}
