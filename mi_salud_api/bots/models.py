@@ -27,9 +27,9 @@ class HistoricalMessage(models.Model):
     flow = models.CharField(max_length=150)
     model_tag = models.CharField(max_length=150, null=True)
     user_tag = models.CharField(max_length=150, null=True)
-    id_message = models.IntegerField()
-    id_message_response = models.IntegerField(null=True)
-    id_rp_user = models.IntegerField()
+    id_message = models.CharField(max_length=150)
+    id_message_response = models.CharField(null=True, max_length=150)
+    id_rp_user = models.CharField(max_length=150)
     id_bot = models.IntegerField()
 
     def __str__(self):

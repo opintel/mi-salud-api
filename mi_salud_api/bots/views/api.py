@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -8,25 +9,31 @@ from bots.ml_model.pre_rules import procesa_reglas
 
 @csrf_exempt
 def tag_message(request, id_model):
+    """
+    Endpoint: /opi/tag-new-message/bot/<int:id_model>/
+    GET:
+    - flow_id
+    - id_rp_user
+    """
+
     bot = get_object_or_404(Bot, id=int(id_model))
-    message = request.POST.get('message', 'Buenas tardes quiero saber algo sobre mi salud!')
-    flow = request.POST.get('flow_id')
-    id_message = request.POST.get('id_message')
-    id_rp_user = request.POST.get('id_rp_user')
+    flow = request.GET.get('flow_id')
+    id_rp_user = request.GET.get('id_rp_user')
 
-    category = procesa_reglas(message)
-    if category['result'] == 'modelo':
-        message_record = HistoricalMessage(
-            message=message,
-            message_date=datetime.now(),
-            flow=flow,
-            model_tag=category['result'],
-            id_message=id_message,
-            id_rp_user=id_rp_user,
-            id_bot=bot.id
-        )
+    messages = query_rp_api(id_rp_user)
+    # category = procesa_reglas(message)
 
-        message_record.save()
+    message_record = HistoricalMessage(
+        message=messages[1].get('text'),
+        message_date=datetime.now(),
+        flow=messages[1].get('channel', {'name'}).get('name'),
+        model_tag=messages[0].get('text'),
+        id_message=messages[1].get('id'),
+        id_rp_user=id_rp_user,
+        id_bot=bot.id
+    )
+
+    message_record.save()
 
     return JsonResponse({'category': category['result']})
 
@@ -44,3 +51,16 @@ def record_response_tag(request, id_model, id_message):
     message_record.save()
 
     return JsonResponse({'status': 'ok'})
+
+
+def query_rp_api(id_user):
+    import requests
+
+    endpoint_url = 'http://'+settings.RP_API_URL+'/api/v2/messages.json?contact=%s&top=True'%(id_user)
+    token = 'token %s' % settings.RP_TOKEN
+
+    headers = {'content-type': 'application/json', 'Authorization': token}
+    response = requests.get(endpoint_url, headers = headers)
+    results = response['results']
+
+    return results

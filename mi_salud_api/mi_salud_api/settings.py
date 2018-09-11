@@ -128,3 +128,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = os.environ.get('STATIC_URL', '/static/')
+RP_TOKEN = os.environ.get('RP_TOKEN', '')
+RP_API_URL = os.environ.get('RP_API_URL', 'http://10.20.55.67')
