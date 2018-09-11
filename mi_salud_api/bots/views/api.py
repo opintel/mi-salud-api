@@ -35,7 +35,7 @@ def tag_message(request, id_model):
 
     message_record.save()
 
-    return JsonResponse({'category': category['result']})
+    return JsonResponse({'category': 'ok'})
 
 
 @csrf_exempt
@@ -61,6 +61,6 @@ def query_rp_api(id_user):
 
     headers = {'content-type': 'application/json', 'Authorization': token}
     response = requests.get(endpoint_url, headers = headers)
-    results = response['results']
+    results = response.json()['results']
 
     return results
