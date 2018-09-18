@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from bots.models import Bot, HistoricalMessage
-from bots.ml_model.pre_rules import procesa_reglas
+from bots.ml_model.script_reglas import procesa_reglas
 from bots.ml_model.model import predice_modelo
 
 
@@ -23,25 +23,29 @@ def tag_message(request, id_model):
     user_tag = request.GET.get('user_tag')
     message = request.GET.get('message')
 
-    messages = query_rp_api(id_rp_user)
-    # category = procesa_reglas(message)
-    if category == 'modelo':
-        predice_modelo(id_rp_user, message, settings.RP_TOKEN)
+    # messages = query_rp_api(id_rp_user)
+    category = procesa_reglas(message)
+    print(category)
+    if category['result'] == 'modelo':
+        print("Entro a modelo")
+        print(settings.RP_TOKEN)
+        category = predice_modelo(id_rp_user, message, settings.RP_TOKEN)
 
     message_record = HistoricalMessage(
         message=message,
         message_date=datetime.now(),
-        flow=messages[0].get('channel', {'name': None}).get('name'),
+        flow="mi salud",
         model_tag='',
-        id_message=messages[0].get('id'),
+        id_message="id",
         id_rp_user=id_rp_user,
         id_bot=bot.id,
         user_tag=user_tag
     )
 
     message_record.save()
+    print(category)
 
-    return JsonResponse({'category': 'ok'})
+    return JsonResponse({'category': category['pred']})
 
 
 @csrf_exempt

@@ -10,12 +10,13 @@ from sklearn.externals import joblib
 from numpy import reshape, concatenate, unique, vectorize, array, round
 from nltk.stem.snowball import SnowballStemmer
 
-import bots.ml_model.script_reglas
+from bots.ml_model.script_reglas import give_emoji_free_text
 
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 print(PATH)
 
+nltk.download('punkt')
 features_stem_tfidf=joblib.load(PATH + '/modelo/mat_tfidf.pkl') #1
 pca=joblib.load(PATH + '/modelo/pca.pkl')  #2
 clasificador=joblib.load(PATH + '/modelo/modelo.pkl') # 3
@@ -27,7 +28,7 @@ def procesa_texto(texto):
 
     texto=re.sub('[^\w\s]','', texto)
 
-    texto=script_reglas.give_emoji_free_text(texto)
+    texto=give_emoji_free_text(texto)
 
     texto=unicodedata.normalize('NFD', texto).encode('ascii', 'ignore').decode('utf-8')
     wc=len(str(texto).split(" "))
@@ -52,7 +53,7 @@ stemmer=SnowballStemmer('spanish')
 
 def predice_modelo(contact_uuid, texto, token):
     response = requests.get("http://rapidpro.datos.gob.mx/api/v2/runs.json",
-                            headers={"Authorization": token},
+                            headers={"Authorization": "Token {}".format(token)},
                             params={"contact": contact_uuid})
     response=json.loads(response.text)
     hora=response['results'][0]['created_on']
