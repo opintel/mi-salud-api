@@ -3,8 +3,9 @@ import re
 import json
 import requests
 import unicodedata
-
 import nltk
+
+from django.conf import settings
 
 from sklearn.externals import joblib
 from numpy import reshape, concatenate, unique, vectorize, array, round
@@ -14,12 +15,13 @@ from bots.ml_model.script_reglas import give_emoji_free_text
 
 
 PATH = os.path.dirname(os.path.abspath(__file__))
-print(PATH)
 
-nltk.download('punkt')
-features_stem_tfidf=joblib.load(PATH + '/modelo/mat_tfidf.pkl') #1
-pca=joblib.load(PATH + '/modelo/pca.pkl')  #2
-clasificador=joblib.load(PATH + '/modelo/modelo.pkl') # 3
+if settings.DOWNLOAD_NLTK:
+    nltk.download('punkt')
+
+features_stem_tfidf = joblib.load(PATH + '/modelo/mat_tfidf.pkl') #1
+pca = joblib.load(PATH + '/modelo/pca.pkl')  #2
+clasificador = joblib.load(PATH + '/modelo/modelo.pkl') # 3
 
 
 def procesa_texto(texto):

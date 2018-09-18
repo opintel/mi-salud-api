@@ -130,3 +130,4 @@ USE_TZ = True
 STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 RP_TOKEN = os.environ.get('RP_TOKEN', '')
 RP_API_URL = os.environ.get('RP_API_URL', 'http://10.20.55.67')
+DOWNLOAD_NLTK = os.environ.get('RP_TOKEN', 'False') == 'True'

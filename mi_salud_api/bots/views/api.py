@@ -9,7 +9,7 @@ from bots.ml_model.model import predice_modelo
 
 
 @csrf_exempt
-def tag_message(request, id_model):
+def tag_message_with_model(request, id_model):
     """
     Endpoint: /opi/tag-new-message/bot/<int:id_model>/
     GET:
@@ -23,19 +23,18 @@ def tag_message(request, id_model):
     user_tag = request.GET.get('user_tag')
     message = request.GET.get('message')
 
-    # messages = query_rp_api(id_rp_user)
     category = procesa_reglas(message)
-    print(category)
+
     if category['result'] == 'modelo':
-        print("Entro a modelo")
-        print(settings.RP_TOKEN)
         category = predice_modelo(id_rp_user, message, settings.RP_TOKEN)
+    else:
+        category['pred'] = category['result']
 
     message_record = HistoricalMessage(
         message=message,
         message_date=datetime.now(),
-        flow="mi salud",
-        model_tag='',
+        flow=bot.name,
+        model_tag=category['pred'],
         id_message="id",
         id_rp_user=id_rp_user,
         id_bot=bot.id,
@@ -43,24 +42,30 @@ def tag_message(request, id_model):
     )
 
     message_record.save()
-    print(category)
 
     return JsonResponse({'category': category['pred']})
 
 
 @csrf_exempt
-def record_response_tag(request, id_model, id_message):
-    bot = get_object_or_404(Bot, id=int(id_model))
-    id_message_response = request.POST.get('id_message_response')
-    user_tag = request.POST.get('user_tag')
+def model_is_in_training(request, id_bot):
+    bot = get_object_or_404(Bot, id=int(id_bot))
 
-    message_record = get_object_or_404(HistoricalMessage, id_message=id_message)
-    message_record.id_message_response = id_message_response
-    message_record.user_tag = user_tag
+    return JsonResponse({'traning': bot.is_in_training})
 
-    message_record.save()
 
-    return JsonResponse({'status': 'ok'})
+# @csrf_exempt
+# def record_response_tag(request, id_model, id_message):
+#     bot = get_object_or_404(Bot, id=int(id_model))
+#     id_message_response = request.POST.get('id_message_response')
+#     user_tag = request.POST.get('user_tag')
+
+#     message_record = get_object_or_404(HistoricalMessage, id_message=id_message)
+#     message_record.id_message_response = id_message_response
+#     message_record.user_tag = user_tag
+
+#     message_record.save()
+
+#     return JsonResponse({'status': 'ok'})
 
 
 def query_rp_api(id_user):
