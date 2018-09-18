@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from bots.models import Bot, HistoricalMessage
 from bots.ml_model.pre_rules import procesa_reglas
+from bots.ml_model.model import predice_modelo
 
 
 @csrf_exempt
@@ -24,13 +25,15 @@ def tag_message(request, id_model):
 
     messages = query_rp_api(id_rp_user)
     # category = procesa_reglas(message)
+    if category == 'modelo':
+        predice_modelo(id_rp_user, message, settings.RP_TOKEN)
 
     message_record = HistoricalMessage(
         message=message,
         message_date=datetime.now(),
-        flow=messages[1].get('channel', {'name'}).get('name'),
+        flow=messages[0].get('channel', {'name': None}).get('name'),
         model_tag='',
-        id_message=messages[1].get('id'),
+        id_message=messages[0].get('id'),
         id_rp_user=id_rp_user,
         id_bot=bot.id,
         user_tag=user_tag
