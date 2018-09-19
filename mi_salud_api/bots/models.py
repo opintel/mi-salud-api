@@ -8,7 +8,7 @@ class Bot(models.Model):
     creation_date = models.DateField(auto_now_add=True)
     categories = models.ManyToManyField('Category', related_name='bots')
     enable = models.BooleanField(default=True)
-    is_in_training = models.BooleanField(default=True)
+    is_in_training = models.BooleanField('Is in training', default=True)
 
     def __str__(self):
         return self.name

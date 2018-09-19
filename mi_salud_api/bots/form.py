@@ -9,6 +9,7 @@ class BotForm(forms.ModelForm):
         fields = [
             'name',
             'token',
+            'is_in_training',
             'enable'
         ]
 

@@ -47,8 +47,8 @@ def tag_message_with_model(request, id_model):
 
 
 @csrf_exempt
-def model_is_in_training(request, id_bot):
-    bot = get_object_or_404(Bot, id=int(id_bot))
+def model_is_in_training(request, id_model):
+    bot = get_object_or_404(Bot, id=int(id_model))
 
     return JsonResponse({'traning': bot.is_in_training})
 
