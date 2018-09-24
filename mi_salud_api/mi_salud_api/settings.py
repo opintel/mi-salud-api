@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'oauth2_provider',
-    'bots'
+    'bots',
+    'rpml'
 ]
 
 MIDDLEWARE = [
@@ -126,8 +127,18 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static/'),
+# )
+
+
+MINIMUM_CONCENTRATION = int(os.environ.get('MINIMUM_CONCENTRATION', '4000'))
 STATIC_URL = os.environ.get('STATIC_URL', '/static/')
-RP_TOKEN = os.environ.get('RP_TOKEN', '')
+RP_TOKEN = 'Token {0}'.format(os.environ.get('RP_TOKEN', ''))
 RP_API_URL = os.environ.get('RP_API_URL', 'http://10.20.55.67')
 DOWNLOAD_NLTK = os.environ.get('RP_TOKEN', 'False') == 'True'

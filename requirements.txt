@@ -8,3 +8,4 @@ sklearn==0.0
 numpy==1.13.3
 scipy==1.1.0
 xgboost==0.80
+-e git+ssh://git@github.com/opintel/mi-salud.git@setupversion#egg=rpml
