@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'oauth2_provider',
     'bots',
-    'rpml'
+    # 'rpml'
 ]
 
 MIDDLEWARE = [

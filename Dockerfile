@@ -6,6 +6,8 @@ RUN apt-get update && \
         pkg-config
 
 COPY . /mi-salud
+# COPY id_rsa .ssh/id_rsa.pub
+
 WORKDIR /mi-salud
 
 RUN pip install -r requirements.txt && chmod 777 init-misalud.sh

@@ -4,8 +4,28 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from bots.models import Bot, HistoricalMessage
-from rpml.script_reglas import procesa_reglas
-from rpml.funcion_modelo import predice_modelo
+from bots.ml_model.script_reglas import procesa_reglas
+from bots.ml_model.funcion_modelo import predice_modelo
+
+
+@csrf_exempt
+def pre_rules_model(request, id_model):
+    """
+    Endpoint: /opi/pre-model-rules/bot/<int:id_model>/
+    GET:
+        - flow_id
+        - id_rp_user
+    """
+
+    bot = get_object_or_404(Bot, id=int(id_model))
+
+    id_rp_user = request.GET.get('id_rp_user')
+    message = request.GET.get('message')
+    date = datetime.now()
+
+    category = procesa_reglas(message)
+
+    return JsonResponse({'pre_category': category['result']})
 
 
 @csrf_exempt
@@ -27,7 +47,7 @@ def tag_message_with_model(request, id_model):
     category = procesa_reglas(message)
     token = settings.RP_TOKEN
 
-    if category['result'] == 'modelo' or category['result'] == 'pregunta':
+    if category['result'] == 'other' or category['result'] == 'pregunta':
         category = predice_modelo(id_rp_user, message, settings.RP_TOKEN, settings.MINIMUM_CONCENTRATION, category['result'], date.hour)
     else:
         category['pred'] = category['result']
@@ -52,7 +72,7 @@ def tag_message_with_model(request, id_model):
 def model_is_in_training(request, id_model):
     bot = get_object_or_404(Bot, id=int(id_model))
 
-    return JsonResponse({'traning': bot.is_in_training})
+    return JsonResponse({'training': bot.is_in_training})
 
 
 # @csrf_exempt
