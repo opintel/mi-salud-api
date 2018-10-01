@@ -70,6 +70,12 @@ def tag_message_with_model(request, id_model):
 
 @csrf_exempt
 def model_is_in_training(request, id_model):
+    """
+    Endpoint: /model-is-in-training/bot/<int:id_model>/
+    GET:
+        - flow_id
+        - id_rp_user
+    """
     bot = get_object_or_404(Bot, id=int(id_model))
 
     return JsonResponse({'training': bot.is_in_training})
